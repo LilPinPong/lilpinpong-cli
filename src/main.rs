@@ -1,28 +1,13 @@
-use clap::{Parser, Subcommand};
-
-mod cli;
+use clap::Parser;
+use std::path::PathBuf;
 
 #[derive(Parser)]
-#[command(name = "lpp")]
-#[command(about = "LilPinPong CLI")]
+#[command(name = "lpp", version, about = "Lilpinpong CLI", long_about = "lpp is a CLI tool that generates projects from templates. It supports multiple languages and frameworks, making it easy to kickstart your development process.")]
 struct Cli {
-    #[command(subcommand)]
-    command: Commands,
+    path: Option<PathBuf>
 }
 
-#[derive(Subcommand)]
-enum Commands {
-    Init { name : String },
-}
 
 fn main() {
     let cli: Cli = Cli::parse();
-
-    match cli.command {
-        Commands::Init { name } => {
-            if let Err(e) = cli::commands::init::run(name) {
-                eprintln!("Error: {}", e);
-            }
-        }
-    }
 }
