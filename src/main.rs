@@ -20,7 +20,9 @@ fn main() {
 
     match cli.command {
         Commands::Init { name } => {
-            cli::commands::init::run(name);
+            if let Err(e) = cli::commands::init::run(name) {
+                eprintln!("Error: {}", e);
+            }
         }
     }
 }
