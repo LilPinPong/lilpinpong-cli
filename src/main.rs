@@ -28,7 +28,7 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Some(Commands::Init(args)) => run_init(args)?,
+        Some(Commands::Init(args)) => run_init(&args)?,
         None => {
             println!("No command provided. Use 'lpp init' to create a project.");
         }
