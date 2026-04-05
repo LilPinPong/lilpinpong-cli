@@ -1,5 +1,4 @@
 pub mod mean;
-pub mod mern;
 pub mod stack;
 
 #[derive(Debug, Clone, Copy)]
@@ -30,7 +29,7 @@ pub struct ServerSpec {
 
 pub struct ProjectSpec {
     pub name: String,
-    pub stack: Option<StackType>,
+    pub stack: Option<Stack>,
     pub server: Option<ServerSpec>,
     pub yes: bool,
 }

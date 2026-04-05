@@ -1,9 +1,10 @@
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use anyhow::{bail, Context, Result};
 
-use crate::stacks::{ ProjectSpec, Stack,EXCLUDED_NAMES};
+use crate::stacks::{ ProjectSpec, Stack};
 
 pub fn generate_project(spec: &ProjectSpec) -> Result<PathBuf> {
 
@@ -15,21 +16,29 @@ pub fn generate_project(spec: &ProjectSpec) -> Result<PathBuf> {
     fs::create_dir_all(root.join("app"))?;
     fs::create_dir_all(root.join("server"))?;
 
-    let stack_name = spec.stack.as_ref().and_then(|s: &Stack| Stack::from_cli(s)).unwrap(Stack::Mean);
-    let source = stack_name.source().context("Failed to get stack source")?;
-    let tmp_dir = makeTmpDir(root)?;
-    Stack::download_and_extract(&source.repo_url, &source.git_ref, &tmp_dir)?;
-    Stack::copy_stack_files(&tmp_dir, root, &source.app_dir, &source.server_dir, EXCLUDED_NAMES)?;
-    Stack::copy_stack_files(&tmp_dir, root, &source.server_dir, &source.server_dir, EXCLUDED_NAMES)?;
-    fs::remove_dir_all(&tmp_dir)?;
+    let stack = spec.stack.unwrap_or(Stack::Mean);
+    let source = stack.source().context("Failed to get stack source")?;
+    let tmp_dir = self::make_tmp_dir(root)?;
+    let repo_root = Stack::download_repo(&source.repo_url, &source.git_ref, "main", &tmp_dir)?;
+    Stack::copy_stack_files(&repo_root, root, &source.app_dir, &source.server_dir)?;
+    let _ = fs::remove_dir_all(&tmp_dir)?;
 
     println!(" ✅ Generated project directory '{}'", &spec.name);
-
     Ok(root.to_path_buf())
 }
 
 
-pub fn makeTmpDir(path: &Path) -> Result<PathBuf> {
-    fs::create_dir_all(path.join("tmp"))?;
-    Ok(path.join("tmp"))
+fn make_tmp_dir(path: &Path) -> Result<PathBuf> {
+    let ts = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
+    let dir = std::env::temp_dir().join(format!("lpp-tmp-{}-{}", std::process::id(), ts));
+    fs::create_dir_all(&dir)?;
+    Ok(dir)
+}
+
+struct TmpDirGuard(PathBuf);
+
+impl Drop for TmpDirGuard {
+    fn drop(&mut self) {
+        let _ = fs::remove_dir_all(&self.0);
+    }
 }
