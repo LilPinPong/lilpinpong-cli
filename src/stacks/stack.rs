@@ -109,11 +109,13 @@ impl Stack {
                 Self::copy_dir(&src, &dst)?;
             } else {
                 fs::copy(&src, &dst).with_context(|| {
-                    format!("failed to copy '{}' -> '{}'", src.display(), dst.display())
+                    format!("failed to copy '{}' -> '{}', invalide templates", src.display(), dst.display())
                 })?;
             }
         }
 
         Ok(())
     }
+    
 }
+
