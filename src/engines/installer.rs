@@ -22,9 +22,6 @@ fn express(name: &str, path: &str){
     run("npm install express", path);
 }
 
-fn mongoose(name: &str, path: &str){
-    run("npm install mongoose", path);
-}
 
 fn mongodb(name: &str){
     let mut rng = rand::thread_rng();
