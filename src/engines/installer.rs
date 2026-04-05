@@ -22,7 +22,6 @@ fn express(name: &str, path: &str){
     run("npm install express", path);
 }
 
-
 fn mongodb(name: &str){
     let mut rng = rand::thread_rng();
     let rand_string: String = Alphanumeric.sample_string(&mut rng, 30);
