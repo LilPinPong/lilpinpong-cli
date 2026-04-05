@@ -2,8 +2,10 @@ mod commands;
 mod engines;
 mod stacks;
 
+use anyhow::Result;
 use clap::{Parser, Subcommand};
-use commands::init::{InitArgs};
+
+use commands::init::{run_init, InitArgs};
 
 #[derive(Parser)]
 #[command(
@@ -12,7 +14,6 @@ use commands::init::{InitArgs};
     about = "Lilpinpong CLI",
     long_about = "lpp is a CLI tool that generates projects from templates. It supports multiple languages and frameworks, making it easy to kickstart your development process."
 )]
-
 struct Cli {
     #[command(subcommand)]
     command: Option<Commands>,
@@ -23,6 +24,15 @@ enum Commands {
     Init(InitArgs),
 }
 
-fn main() {
-    let _cli = Cli::parse();
+fn main() -> Result<()> {
+    let cli = Cli::parse();
+
+    match cli.command {
+        Some(Commands::Init(args)) => run_init(args)?,
+        None => {
+            println!("No command provided. Use 'lpp init' to create a project.");
+        }
+    }
+
+    Ok(())
 }

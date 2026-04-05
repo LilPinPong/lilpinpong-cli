@@ -17,7 +17,7 @@ pub struct InitArgs {
     pub server: Option<String>,
 }
 
-fn run_init(args: &InitArgs) -> Result<()> {
+pub fn run_init(args: &InitArgs) -> Result<()> {
     let yes = args.yes;
     let name = resolve_name(&args, yes)?;
     let stack = resolve_stack(&args, yes)?;
@@ -52,7 +52,6 @@ fn resolve_name(args: &InitArgs, yes: bool) -> Result<String> {
         }
     }
 }
-
 
 
 fn resolve_stack(args: &InitArgs, yes: bool) -> Result<Stack> {
