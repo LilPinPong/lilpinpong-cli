@@ -18,17 +18,18 @@ pub fn generate_project(spec: &ProjectSpec) -> Result<PathBuf> {
 
     let stack = spec.stack.unwrap_or(Stack::Mean);
     let source = stack.source().context("Failed to get stack source")?;
-    let tmp_dir = self::make_tmp_dir(root)?;
+    let tmp_dir = self::make_tmp_dir()?;
     let repo_root = Stack::download_repo(&source.repo_url, &source.git_ref, "main", &tmp_dir)?;
     Stack::copy_stack_files(&repo_root, root, &source.app_dir, &source.server_dir)?;
-    let _ = fs::remove_dir_all(&tmp_dir)?;
 
+    
+    let _ = TmpDirGuard(tmp_dir.clone());
     println!(" ✅ Generated project directory '{}'", &spec.name);
     Ok(root.to_path_buf())
 }
 
 
-fn make_tmp_dir(path: &Path) -> Result<PathBuf> {
+fn make_tmp_dir() -> Result<PathBuf> {
     let ts = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
     let dir = std::env::temp_dir().join(format!("lpp-tmp-{}-{}", std::process::id(), ts));
     fs::create_dir_all(&dir)?;
