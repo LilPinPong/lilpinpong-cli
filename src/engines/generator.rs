@@ -1,10 +1,6 @@
 use std::fs;
 use std::path::Path;
 
-struct LppArgs {
-    name: String,
-    value: String,
-}
 
 pub fn generate_project_directory(name: &str) {
     let root = Path::new(name);
