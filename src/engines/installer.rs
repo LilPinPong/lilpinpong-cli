@@ -12,7 +12,7 @@ fn blazor(name: &str, path: &str){
 
 /// Sets up a MongoDB container using Docker with a randomly generated password.
 /// The connection string is saved in a .env file for easy access. This is intended for development use only; for production, use a secure method to manage database credentials.
-fn mongodb(name: &str){
+pub fn mongodb(name: &str){
     let mut rng = rand::thread_rng();
     let rand_string: String = Alphanumeric.sample_string(&mut rng, 30);
 

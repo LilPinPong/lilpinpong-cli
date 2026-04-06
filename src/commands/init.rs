@@ -4,6 +4,7 @@ use anyhow::{Result, bail};
 
 use crate::stacks::{ ProjectSpec, Stack};
 use crate::engines::generator::generate_project;
+use crate::engines::installer::{mongodb}
 
 #[derive(Args, Debug, Clone, Default)]
 pub struct InitArgs {
