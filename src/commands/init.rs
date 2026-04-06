@@ -2,9 +2,10 @@ use clap::{Args};
 use dialoguer::Input;
 use anyhow::{Result, bail};
 
+use crate::engines::process::{is_docker_installed, is_docker_running};
 use crate::stacks::{ ProjectSpec, Stack};
 use crate::engines::generator::generate_project;
-use crate::engines::installer::{mongodb}
+use crate::engines::installer::{mongodb};
 
 #[derive(Args, Debug, Clone, Default)]
 pub struct InitArgs {
@@ -28,6 +29,7 @@ pub fn run_init(args: &InitArgs) -> Result<()> {
     };
 
     let project_root = generate_project(&spec)?;
+
 
     println!("✅ Project created at '{}'", project_root.display());
     println!("✅ Frontend path: '{}/app'", spec.name);
