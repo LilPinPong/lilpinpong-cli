@@ -30,7 +30,6 @@ pub struct ServerSpec {
 pub struct ProjectSpec {
     pub name: String,
     pub stack: Option<Stack>,
-    pub server: Option<ServerSpec>,
     pub yes: bool,
 }
 

@@ -2,7 +2,7 @@ use clap::{Args};
 use dialoguer::Input;
 use anyhow::{Result, bail};
 
-use crate::stacks::{ ProjectSpec, Stack, ServerSpec};
+use crate::stacks::{ ProjectSpec, Stack};
 use crate::engines::generator::generate_project;
 
 #[derive(Args, Debug, Clone, Default)]
@@ -11,8 +11,6 @@ pub struct InitArgs {
     pub name: Option<String>,
     #[arg(short, long, help = "Project stack to generate")]
     pub stack: Option<String>,
-    #[arg(long, help = "Server framework to use")]
-    pub server: Option<String>,
     #[arg(long, help = "Skip prompts and use defaults when possible")]
     pub yes: bool,
 }
@@ -25,7 +23,6 @@ pub fn run_init(args: &InitArgs) -> Result<()> {
     let spec = ProjectSpec {
         name,
         stack: Some(stack),
-        server: args.server.clone().map(|s| ServerSpec { framework: s }),
         yes,
     };
 
