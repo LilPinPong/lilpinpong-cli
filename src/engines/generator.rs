@@ -23,7 +23,7 @@ pub fn generate_project(spec: &ProjectSpec) -> Result<PathBuf> {
     let repo_root = Stack::download_repo(&source.repo_url, &source.git_ref, source.git_ref, &tmp_dir)?;
     Stack::copy_stack_files(&repo_root, root, &source.app_dir, &source.server_dir)?;
 
-    println!(" ✅ Generated project directory '{}'", &spec.name);
+    println!("✅ Generated project directory '{}'", &spec.name);
     Ok(root.to_path_buf())
 }
 

@@ -31,9 +31,9 @@ pub fn run_init(args: &InitArgs) -> Result<()> {
 
     let project_root = generate_project(&spec)?;
 
-    println!("Project created at '{}'", project_root.display());
-    println!("Frontend path: '{}/app'", spec.name);
-    println!("Backend path: '{}/server'", spec.name);
+    println!("✅ Project created at '{}'", project_root.display());
+    println!("✅ Frontend path: '{}/app'", spec.name);
+    println!("✅ Backend path: '{}/server'", spec.name);
 
     Ok(())
 }
